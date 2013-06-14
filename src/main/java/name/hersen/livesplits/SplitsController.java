@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -17,10 +18,16 @@ public class SplitsController {
     private
     ResultParser parser;
 
-    @RequestMapping(value = "/images", method = RequestMethod.GET)
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public void listImages(PrintWriter printWriter) throws URISyntaxException {
         List<String> strings = parser.getImages(this);
         printWriter.print(strings);
+    }
+
+    @RequestMapping(value = "/images", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> listImages() throws URISyntaxException {
+        return parser.getImages(this);
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.GET)

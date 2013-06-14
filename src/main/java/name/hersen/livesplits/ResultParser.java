@@ -33,7 +33,7 @@ public class ResultParser {
     }
 
     byte[] getImageBytes(String imageId, SplitsController splitsController) throws IOException {
-        String s = "/SDC" + imageId + ".JPG";
+        String s = "/" + imageId + ".JPG";
         InputStream resourceAsStream = splitsController.getClass().getResourceAsStream(resourceDirectory + s);
         return IOUtils.toByteArray(resourceAsStream);
     }
