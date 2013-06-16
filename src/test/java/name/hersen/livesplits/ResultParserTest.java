@@ -7,7 +7,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
@@ -26,7 +25,7 @@ public class ResultParserTest {
 
     @Test
     public void getImages() throws Exception {
-        when(imagesResources.getImages()).thenReturn(asList("single"));
+        when(imagesResources.getFileNames()).thenReturn(asList("single"));
 
         List<String> result = target.getImages();
 
@@ -37,12 +36,19 @@ public class ResultParserTest {
 
     @Test
     public void getImageBytes() throws Exception {
-        when(imagesResources.getImageBytes(anyString())).thenReturn(new byte[]{1});
+        when(imagesResources.getImageBytes("found")).thenReturn(new byte[]{1});
 
-        byte[] result = target.getImageBytes("single");
+        byte[] result = target.getImageBytes("found");
 
         assertNotNull(result);
         assertEquals(1, result.length);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowNotFoundException() throws Exception {
+        when(imagesResources.getImageBytes("found")).thenReturn(new byte[]{1});
+
+        target.getImageBytes("not-found");
     }
 
 }

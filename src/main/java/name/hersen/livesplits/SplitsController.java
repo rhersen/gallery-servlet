@@ -29,9 +29,9 @@ public class SplitsController {
         return parser.getImages();
     }
 
-    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.GET)
-    public void getImage(OutputStream outputStream, @PathVariable("imageId") String imageId) throws IOException {
-        byte[] bytes = parser.getImageBytes(imageId);
+    @RequestMapping(value = "/images/{fileName:.+}", method = RequestMethod.GET)
+    public void getImage(OutputStream outputStream, @PathVariable("fileName") String fileName) throws IOException {
+        byte[] bytes = parser.getImageBytes(fileName);
         outputStream.write(bytes);
         System.out.println("wrote " + bytes.length + " bytes");
     }

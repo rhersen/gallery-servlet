@@ -15,23 +15,25 @@ import static java.util.Collections.emptyList;
 
 @Service
 public class ImagesResources {
-    List<String> getImages() {
+    List<String> getFileNames() {
         URL resourceUrl = getClass().getResource("/img");
-        List<String> strings = null;
         try {
             if (resourceUrl != null && resourceUrl.getProtocol().equals("file")) {
                 File file = new File(resourceUrl.toURI());
-                strings = asList(file.list());
+                return asList(file.list());
             }
         } catch (URISyntaxException e) {
-            strings = emptyList();
+            return emptyList();
         }
-        return strings;
+        return emptyList();
     }
 
-    byte[] getImageBytes(String imageId) throws IOException {
-        String s = "/" + imageId + ".JPG";
-        InputStream resourceAsStream = getClass().getResourceAsStream("/img" + s);
+    byte[] getImageBytes(String fileName) throws IOException {
+        String s = "/img/" + fileName;
+        InputStream resourceAsStream = getClass().getResourceAsStream(s);
+        if (resourceAsStream == null) {
+            return null;
+        }
         return IOUtils.toByteArray(resourceAsStream);
     }
 }
