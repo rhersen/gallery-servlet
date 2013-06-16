@@ -20,19 +20,18 @@ public class SplitsController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public void listImages(PrintWriter printWriter) throws URISyntaxException {
-        List<String> strings = parser.getImages(this);
-        printWriter.print(strings);
+        printWriter.print(parser.getImages());
     }
 
     @RequestMapping(value = "/images", method = RequestMethod.GET)
     @ResponseBody
     public List<String> listImages() throws URISyntaxException {
-        return parser.getImages(this);
+        return parser.getImages();
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.GET)
     public void getImage(OutputStream outputStream, @PathVariable("imageId") String imageId) throws IOException {
-        byte[] bytes = parser.getImageBytes(imageId, this);
+        byte[] bytes = parser.getImageBytes(imageId);
         outputStream.write(bytes);
         System.out.println("wrote " + bytes.length + " bytes");
     }
