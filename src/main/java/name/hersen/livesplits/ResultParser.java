@@ -18,8 +18,13 @@ public class ResultParser {
         return imagesResources.getFileNames();
     }
 
-    public byte[] getImageBytes(String fileName) throws IOException {
-        byte[] r = imagesResources.getImageBytes(fileName);
+    public byte[] getImageBytes(String fileName, Integer width) throws IOException {
+        byte[] r;
+        if (width == null) {
+            r = imagesResources.getFullImage(fileName);
+        } else {
+            r = imagesResources.getPreview(fileName, width);
+        }
         if (r == null) {
             throw new NotFoundException(fileName);
         }

@@ -28,12 +28,28 @@ public class ImagesResources {
         return emptyList();
     }
 
-    byte[] getImageBytes(String fileName) throws IOException {
+    byte[] getFullImage(String fileName) throws IOException {
         String s = "/img/" + fileName;
         InputStream resourceAsStream = getClass().getResourceAsStream(s);
         if (resourceAsStream == null) {
             return null;
         }
         return IOUtils.toByteArray(resourceAsStream);
+    }
+
+    byte[] getPreview(String fileName, Integer width) throws IOException {
+        InputStream resourceAsStream = getInputStream(fileName, width);
+        if (resourceAsStream == null) {
+            resourceAsStream = getInputStream(fileName, 256);
+            if (resourceAsStream == null) {
+                return null;
+            }
+        }
+        return IOUtils.toByteArray(resourceAsStream);
+    }
+
+    private InputStream getInputStream(String fileName, Integer width) {
+        String s = "/" + width + "/" + fileName;
+        return getClass().getResourceAsStream(s);
     }
 }

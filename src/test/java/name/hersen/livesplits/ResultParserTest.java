@@ -15,18 +15,23 @@ public class ResultParserTest {
 
     private ResultParser target;
     private ImagesResources imagesResources;
+    private byte[] full;
+    private byte[] preview;
 
     @Before
     public void setUp() throws Exception {
-        target = new ResultParser();
+        full = new byte[]{1};
+        preview = new byte[]{2};
         imagesResources = mock(ImagesResources.class);
+        when(imagesResources.getFileNames()).thenReturn(asList("single"));
+        when(imagesResources.getFullImage("found")).thenReturn(full);
+        when(imagesResources.getPreview("found", 256)).thenReturn(preview);
+        target = new ResultParser();
         setField(target, "imagesResources", imagesResources);
     }
 
     @Test
     public void getImages() throws Exception {
-        when(imagesResources.getFileNames()).thenReturn(asList("single"));
-
         List<String> result = target.getImages();
 
         assertNotNull(result);
@@ -36,19 +41,24 @@ public class ResultParserTest {
 
     @Test
     public void getImageBytes() throws Exception {
-        when(imagesResources.getImageBytes("found")).thenReturn(new byte[]{1});
-
-        byte[] result = target.getImageBytes("found");
+        byte[] result = target.getImageBytes("found", null);
 
         assertNotNull(result);
-        assertEquals(1, result.length);
+        assertEquals(full, result);
+    }
+    @Test
+    public void getPreview() throws Exception {
+        byte[] result = target.getImageBytes("found", 256);
+
+        assertNotNull(result);
+        assertEquals(preview, result);
     }
 
     @Test(expected = NotFoundException.class)
     public void shouldThrowNotFoundException() throws Exception {
-        when(imagesResources.getImageBytes("found")).thenReturn(new byte[]{1});
+        when(imagesResources.getFullImage("found")).thenReturn(new byte[]{1});
 
-        target.getImageBytes("not-found");
+        target.getImageBytes("not-found", 111);
     }
 
 }
